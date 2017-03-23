@@ -26,6 +26,22 @@
         <User flag="deleted" city="spb" email="deleted@yandex.ru">Deleted</User>
         <User flag="active" city="mow" email="user1@gmail.com" groupRefs="masterjava01 topjava06">User1</User>
         <User flag="active" city="kiv" email="user2@yandex.ru" groupRefs="masterjava01">User2</User>
-        <User flag="active" city="mnsk" email="user3@yandex.ru" groupRefs="masterjava01">User3</User>
+        <User flag="active" city="mnsk" email="user4@yandex.ru" groupRefs="masterjava01">User4</User>
+        <User flag="active" city="mnsk" email="user5@yandex.ru" groupRefs="masterjava01">User5</User>
+        <User flag="active" city="mnsk" email="user6@yandex.ru" groupRefs="masterjava01">User6</User>
+        <User flag="active" city="mnsk" email="user7@yandex.ru" groupRefs="masterjava01">User7</User>
+        <User flag="active" city="mnsk" email="user8@yandex.ru" groupRefs="masterjava01">User8</User>
+        <User flag="active" city="mnsk" email="user9@yandex.ru" groupRefs="masterjava01">User9</User>
+        <User flag="active" city="mnsk" email="user10@yandex.ru" groupRefs="masterjava01">User10</User>
+        <User flag="active" city="mnsk" email="user11@yandex.ru" groupRefs="masterjava01">User11</User>
+        <User flag="active" city="mnsk" email="user12@yandex.ru" groupRefs="masterjava01">User12</User>
+        <User flag="active" city="mnsk" email="user13@yandex.ru" groupRefs="masterjava01">User13</User>
+        <User flag="active" city="mnsk" email="user14@yandex.ru" groupRefs="masterjava01">User14</User>
+        <User flag="active" city="mnsk" email="user15@yandex.ru" groupRefs="masterjava01">User15</User>
+        <User flag="active" city="mnsk" email="user16@yandex.ru" groupRefs="masterjava01">User16</User>
+        <User flag="active" city="mnsk" email="user17@yandex.ru" groupRefs="masterjava01">User17</User>
+        <User flag="active" city="mnsk" email="user18@yandex.ru" groupRefs="masterjava01">User18</User>
+        <User flag="active" city="mnsk" email="user19@yandex.ru" groupRefs="masterjava01">User19</User>
+        <User flag="active" city="mnsk" email="user20@yandex.ru" groupRefs="masterjava01">User20</User>
     </Users>
 </Payload>

@@ -1,6 +1,9 @@
 package ru.javaops.masterjava.export;
 
 import org.thymeleaf.context.WebContext;
+import ru.javaops.masterjava.persist.DBIProvider;
+import ru.javaops.masterjava.persist.dao.AbstractDao;
+import ru.javaops.masterjava.persist.dao.UserDao;
 import ru.javaops.masterjava.persist.model.User;
 
 import javax.servlet.ServletException;
@@ -21,11 +24,22 @@ import static ru.javaops.masterjava.export.ThymeleafListener.engine;
 public class UploadServlet extends HttpServlet {
 
     private final UserExport userExport = new UserExport();
+    private static List<User> usersToImport;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         final WebContext webContext = new WebContext(req, resp, req.getServletContext(), req.getLocale());
-        engine.process("export", webContext, resp.getWriter());
+        req.setCharacterEncoding("UTF-8");
+        String action = req.getParameter("action");
+        if (action==null) {engine.process("export", webContext, resp.getWriter());}
+        else if (action.equals("import"))
+        {
+            for (User user:usersToImport)
+            {
+
+            }
+        }
+
     }
 
     @Override
@@ -37,6 +51,7 @@ public class UploadServlet extends HttpServlet {
             Part filePart = req.getPart("fileToUpload");
             try (InputStream is = filePart.getInputStream()) {
                 List<User> users = userExport.process(is);
+                usersToImport.addAll(users);
                 webContext.setVariable("users", users);
                 engine.process("result", webContext, resp.getWriter());
             }
