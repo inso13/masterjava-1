@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import static ru.javaops.masterjava.export.ThymeleafListener.engine;
@@ -24,7 +25,8 @@ import static ru.javaops.masterjava.export.ThymeleafListener.engine;
 public class UploadServlet extends HttpServlet {
 
     private final UserExport userExport = new UserExport();
-    private static List<User> usersToImport;
+    private static List<User> usersToImport = new ArrayList<>();
+    private UserDao userDao = DBIProvider.getDBI().onDemand(UserDao.class);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -36,8 +38,10 @@ public class UploadServlet extends HttpServlet {
         {
             for (User user:usersToImport)
             {
-
+                if (user.isNew())
+                {userDao.insert(user);}
             }
+            engine.process("export", webContext, resp.getWriter());
         }
 
     }
@@ -51,6 +55,7 @@ public class UploadServlet extends HttpServlet {
             Part filePart = req.getPart("fileToUpload");
             try (InputStream is = filePart.getInputStream()) {
                 List<User> users = userExport.process(is);
+                usersToImport.clear();
                 usersToImport.addAll(users);
                 webContext.setVariable("users", users);
                 engine.process("result", webContext, resp.getWriter());
