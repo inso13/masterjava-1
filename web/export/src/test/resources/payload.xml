@@ -43,5 +43,6 @@
         <User flag="active" city="mnsk" email="user18@yandex.ru" groupRefs="masterjava01">User18</User>
         <User flag="active" city="mnsk" email="user19@yandex.ru" groupRefs="masterjava01">User19</User>
         <User flag="active" city="mnsk" email="user20@yandex.ru" groupRefs="masterjava01">User20</User>
+        <User flag="active" city="mnsk" groupRefs="masterjava01">Fail User</User>
     </Users>
 </Payload>

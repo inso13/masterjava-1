@@ -1,0 +1,30 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Uploaded users</title>
+</head>
+<body>
+<h4><a href="/">Export XML</a></h4>
+<h2>Import results</h2>
+<h3>Success count: <a th:text="${sucessCount}"/></h3>
+<h3>Fails count: <a th:text="${failCount}"/> </h3>
+<h2>Failed users</h2>
+<table border="1" cellpadding="8" cellspacing="0">
+    <thead>
+    <tr>
+        <th>Full Name</th>
+        <th>Email</th>
+        <th>Flag</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!--/*@thymesVar id="failUsers" type="java.util.ArrayList"*/-->
+    <tr th:each="failUser: ${failUsers}">
+        <td th:text="${failUser.fullName}"></td>
+        <td th:utext="${failUser.email}"></td>
+        <td th:text="${failUser.flag}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

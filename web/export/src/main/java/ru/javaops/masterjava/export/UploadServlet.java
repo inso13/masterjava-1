@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static ru.javaops.masterjava.export.ThymeleafListener.engine;
 
@@ -27,6 +28,9 @@ public class UploadServlet extends HttpServlet {
     private final UserExport userExport = new UserExport();
     private static List<User> usersToImport = new ArrayList<>();
     private UserDao userDao = DBIProvider.getDBI().onDemand(UserDao.class);
+    private static AtomicInteger successCount = new AtomicInteger(0);
+    private static AtomicInteger failCount = new AtomicInteger(0);
+    private static List<User> failUsers = new ArrayList<>();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -36,12 +40,23 @@ public class UploadServlet extends HttpServlet {
         if (action==null) {engine.process("export", webContext, resp.getWriter());}
         else if (action.equals("import"))
         {
+            successCount.set(0);
+            failCount.set(0);
             for (User user:usersToImport)
             {
-                if (user.isNew())
-                {userDao.insert(user);}
+                    try {
+                        userDao.insert(user);
+                        successCount.incrementAndGet();
+                    } catch (Exception e) {
+
+                        failCount.incrementAndGet();
+                        failUsers.add(user);
+                    }
             }
-            engine.process("export", webContext, resp.getWriter());
+            req.setAttribute("sucessCount", successCount);
+            req.setAttribute("failCount", failCount);
+            req.setAttribute("failUsers", failUsers);
+            engine.process("importResult", webContext, resp.getWriter());
         }
 
     }
@@ -56,6 +71,7 @@ public class UploadServlet extends HttpServlet {
             try (InputStream is = filePart.getInputStream()) {
                 List<User> users = userExport.process(is);
                 usersToImport.clear();
+                failUsers.clear();
                 usersToImport.addAll(users);
                 webContext.setVariable("users", users);
                 engine.process("result", webContext, resp.getWriter());
