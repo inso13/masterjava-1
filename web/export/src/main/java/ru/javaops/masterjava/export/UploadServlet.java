@@ -53,9 +53,9 @@ public class UploadServlet extends HttpServlet {
                         failUsers.add(user);
                     }
             }
-            req.setAttribute("sucessCount", successCount);
-            req.setAttribute("failCount", failCount);
-            req.setAttribute("failUsers", failUsers);
+            webContext.setVariable("sucessCount", successCount);
+            webContext.setVariable("failCount", failCount);
+            webContext.setVariable("failUsers", failUsers);
             engine.process("importResult", webContext, resp.getWriter());
         }
 
