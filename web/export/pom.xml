@@ -18,6 +18,46 @@
 
     <build>
         <finalName>export</finalName>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven2-plugin</artifactId>
+                        <version>1.5.0</version>
+                        <configuration>
+                            <container>
+                                <containerId>tomcat8x</containerId>
+                                <systemProperties>
+                                    <file.encoding>UTF-8</file.encoding>
+                                </systemProperties>
+                                <dependencies>
+                                    <dependency>
+                                        <groupId>org.postgresql</groupId>
+                                        <artifactId>postgresql</artifactId>
+                                    </dependency>
+                                </dependencies>
+                            </container>
+                            <configuration>
+                                <configfiles>
+                                    <configfile>
+                                        <file>src/main/resources/tomcat/context.xml</file>
+                                        <todir>conf/Catalina/localhost/</todir>
+                                        <tofile>context.xml.default</tofile>
+                                    </configfile>
+                                </configfiles>
+                            </configuration>
+                            <deployables>
+                                <deployable>
+                                    <groupId>ru.javaops</groupId>
+                                    <artifactId>export</artifactId>
+                                    <type>war</type>
+                                    <properties>
+                                        <context>${project.build.finalName}</context>
+                                    </properties>
+                                </deployable>
+                            </deployables>
+                        </configuration>
+                    </plugin>
+                </plugins>
     </build>
 
     <dependencies>

@@ -1,10 +1,16 @@
 package ru.javaops.masterjava.persist;
 
 import com.google.common.collect.ImmutableList;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+import org.skife.jdbi.v2.Handle;
+import org.skife.jdbi.v2.TransactionConsumer;
+import org.skife.jdbi.v2.TransactionStatus;
 import ru.javaops.masterjava.persist.dao.UserDao;
 import ru.javaops.masterjava.persist.model.User;
 import ru.javaops.masterjava.persist.model.UserFlag;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -33,9 +39,12 @@ public class UserTestData {
     public static void setUp() {
         UserDao dao = DBIProvider.getDao(UserDao.class);
         dao.clean();
-        DBIProvider.getDBI().useTransaction((conn, status) -> {
-            FIST5_USERS.forEach(dao::insert);
-            dao.insert(USER3);
+        DBIProvider.getDBI().useTransaction(new TransactionConsumer() {
+            @Override
+            public void useTransaction(Handle conn, TransactionStatus status) throws Exception {
+                dao.insert(FIST5_USERS);
+                dao.insert(Collections.singletonList(USER3));
+            }
         });
     }
 }

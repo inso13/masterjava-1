@@ -16,6 +16,7 @@ import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -45,7 +46,7 @@ public class UploadServlet extends HttpServlet {
             for (User user:usersToImport)
             {
                     try {
-                        userDao.insert(user);
+                        userDao.insert(Collections.singletonList(user));
                         successCount.incrementAndGet();
                     } catch (Exception e) {
 
