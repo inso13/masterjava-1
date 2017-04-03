@@ -25,6 +25,7 @@ public class UploadServlet extends HttpServlet {
     private static final int CHUNK_SIZE = 2000;
     private final UserExport userExport = new UserExport();
     private final CityExport cityExport = new CityExport();
+    private final ProjectExport projectExport = new ProjectExport();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -49,12 +50,17 @@ public class UploadServlet extends HttpServlet {
                         List<CityExport.FailedNames> failedNames = cityExport.process(is, chunkSize);
                         log.info("Failed cities: " + failedNames); list.addAll(failedNames);
                     }
+                    try (InputStream is = filePart.getInputStream()) {
+                        List<ProjectExport.FailedProjects> failedProjects = projectExport.process(is, chunkSize);
+                        log.info("Failed cities: " + failedProjects); list.addAll(failedProjects);
+                    }
 
                 try (InputStream is = filePart.getInputStream()) {
                     List<UserExport.FailedEmail> failedEmails = userExport.process(is, chunkSize);
                     log.info("Failed users: " + failedEmails);
-
                     list.addAll(failedEmails);
+
+
                     final WebContext webContext =
                             new WebContext(req, resp, req.getServletContext(), req.getLocale(),
                                     ImmutableMap.of("failed", list));
