@@ -7,6 +7,7 @@ import org.skife.jdbi.v2.sqlobject.customizers.BatchChunkSize;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapperFactory;
 import ru.javaops.masterjava.persist.DBIProvider;
 import ru.javaops.masterjava.persist.model.City;
+import ru.javaops.masterjava.persist.model.Group;
 import ru.javaops.masterjava.persist.model.Project;
 
 import java.util.List;
@@ -61,9 +62,14 @@ public abstract class ProjectDao implements AbstractDao {
 //            "ON CONFLICT (email) DO UPDATE SET full_name=:fullName, flag=CAST(:flag AS USER_FLAG)")
     public abstract int[] insertBatch(@BindBean List<Project> projects, @BatchChunkSize int chunkSize);
 
+    @SqlBatch("INSERT INTO groups (project_id, description, type) VALUES (:project_id, :description, type)" +
+            "ON CONFLICT DO NOTHING")
+    public abstract void insertGroups(@BindBean List<Group> groups, @BatchChunkSize int chunkSize);
+
 
     public List<String> insertAndGetAlreadyPresent(List<Project> projects) {
         int[] result = insertBatch(projects, projects.size());
+       for (Project project:projects) {insertGroups(project.getGroups(), 2000);}
         return IntStreamEx.range(0, projects.size())
                 .filter(i -> result[i] == 0)
                 .mapToObj(index -> projects.get(index).getDescription())

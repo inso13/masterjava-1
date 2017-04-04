@@ -1,12 +1,15 @@
 package ru.javaops.masterjava.export;
 
+import com.sun.jmx.remote.internal.ArrayQueue;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import one.util.streamex.StreamEx;
 import ru.javaops.masterjava.persist.DBIProvider;
 import ru.javaops.masterjava.persist.dao.ProjectDao;
 import ru.javaops.masterjava.persist.model.City;
+import ru.javaops.masterjava.persist.model.Group;
 import ru.javaops.masterjava.persist.model.Project;
+import ru.javaops.masterjava.xml.schema.GroupType;
 import ru.javaops.masterjava.xml.util.StaxStreamProcessor;
 
 import javax.xml.stream.XMLStreamException;
@@ -67,7 +70,18 @@ public class ProjectExport {
 
                 while (processor.doUntil(XMLEvent.START_ELEMENT, "Project")) {
                     final String description = processor.getAttribute("name");
-                    final Project project = new Project(id++, description);
+                    List<Group> groups = new ArrayList<>();
+                    Project project = new Project(id++, description);
+
+                    while (processor.doUntil(XMLEvent.START_ELEMENT, "Group"))
+                    {
+                        final String name = processor.getAttribute("name");
+                        final String type = GroupType.valueOf(processor.getAttribute("type")).toString();
+                        final Group group = new Group(project.getId(), name, type);
+                        groups.add(group);
+                        if (processor.getReader().next()==2) {break;} //TODO: breaks after each group
+                    }
+                    project.setGroups(groups);
                     chunk.add(project);
                     if (chunk.size() == chunkSize) {
                         futures.add(submit(chunk));
