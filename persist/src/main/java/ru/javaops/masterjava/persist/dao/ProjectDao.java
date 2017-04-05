@@ -62,14 +62,14 @@ public abstract class ProjectDao implements AbstractDao {
 //            "ON CONFLICT (email) DO UPDATE SET full_name=:fullName, flag=CAST(:flag AS USER_FLAG)")
     public abstract int[] insertBatch(@BindBean List<Project> projects, @BatchChunkSize int chunkSize);
 
-    @SqlBatch("INSERT INTO groups (project_id, description, type) VALUES (:project_id, :description, type)" +
+    @SqlBatch("INSERT INTO groups (project_id, description, type) VALUES (:projectId, :description, :type)" +
             "ON CONFLICT DO NOTHING")
     public abstract void insertGroups(@BindBean List<Group> groups, @BatchChunkSize int chunkSize);
 
 
     public List<String> insertAndGetAlreadyPresent(List<Project> projects) {
         int[] result = insertBatch(projects, projects.size());
-       for (Project project:projects) {insertGroups(project.getGroups(), 2000);}
+       for (Project project:projects) {insertGroups(project.getGroups(), project.getGroups().size());}
         return IntStreamEx.range(0, projects.size())
                 .filter(i -> result[i] == 0)
                 .mapToObj(index -> projects.get(index).getDescription())

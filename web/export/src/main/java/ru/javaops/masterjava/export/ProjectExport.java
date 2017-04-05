@@ -73,13 +73,16 @@ public class ProjectExport {
                     List<Group> groups = new ArrayList<>();
                     Project project = new Project(id++, description);
 
+                    label:
                     while (processor.doUntil(XMLEvent.START_ELEMENT, "Group"))
                     {
                         final String name = processor.getAttribute("name");
                         final String type = GroupType.valueOf(processor.getAttribute("type")).toString();
                         final Group group = new Group(project.getId(), name, type);
                         groups.add(group);
-                        if (processor.getReader().next()==2) {break;} //TODO: breaks after each group
+                       if (processor.getReader().next()==2) {
+                           break label;
+                       } //TODO: breaks after each group
                     }
                     project.setGroups(groups);
                     chunk.add(project);

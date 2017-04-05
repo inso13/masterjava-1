@@ -35,6 +35,6 @@ CREATE UNIQUE INDEX project_idx ON projects (description);
 CREATE TABLE groups (
   project_id INTEGER NOT NULL,
   description TEXT NOT NULL,
-  type TEXT,
+  type TEXT NOT NULL,
   FOREIGN KEY (project_id) REFERENCES projects (id) ON DELETE CASCADE
 );
