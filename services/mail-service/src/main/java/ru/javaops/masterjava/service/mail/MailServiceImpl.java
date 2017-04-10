@@ -3,6 +3,7 @@ package ru.javaops.masterjava.service.mail;
 import javax.jws.WebService;
 import java.util.List;
 
+
 /**
  * gkislin
  * 15.11.2016
