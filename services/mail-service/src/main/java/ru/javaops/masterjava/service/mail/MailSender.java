@@ -20,10 +20,10 @@ public class MailSender {
             Email email = new SimpleEmail();
             email.setHostName("smtp.yandex.ru");
             email.setSmtpPort(465);
-            email.setAuthenticator(new DefaultAuthenticator("nedis89@yandex.ru", "V22gh7rpm"));
+            email.setAuthenticator(new DefaultAuthenticator("nedis89", "V22gh7rpm"));
             email.setSSLOnConnect(true);
             email.setDebug(true);
-            email.setFrom("MasterJava");
+            email.setFrom("nedis89@yandex.ru");
             email.setSubject("TestMail");
             email.setMsg("This is a test mail ... :-)");
             email.addTo(addressee.getEmail());
