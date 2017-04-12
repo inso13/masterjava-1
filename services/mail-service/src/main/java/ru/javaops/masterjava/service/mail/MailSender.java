@@ -5,7 +5,12 @@ import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
+import ru.javaops.masterjava.persist.DBIProvider;
+import ru.javaops.masterjava.persist.dao.CityDao;
+import ru.javaops.masterjava.persist.dao.EmailDao;
+import ru.javaops.masterjava.persist.model.EmailResult;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -14,7 +19,11 @@ import java.util.List;
  */
 @Slf4j
 public class MailSender {
-    static void sendMail(List<Addressee> to, List<Addressee> cc, String subject, String body) {
+
+    private final static EmailDao emailDao = DBIProvider.getDao(EmailDao.class);
+
+     static void sendMail(List<Addressee> to, List<Addressee> cc, String subject, String body) {
+
         try {
             for (Addressee addressee:to) {
             Email email = new SimpleEmail();
@@ -27,9 +36,14 @@ public class MailSender {
             email.setSubject("TestMail");
             email.setMsg("This is a test mail ... :-)");
             email.addTo(addressee.getEmail());
-            email.send();}
+            email.send();
+                EmailResult emailResult = new EmailResult("success", LocalDateTime.now());
+             emailDao.insertGeneratedId(emailResult);
+            }
 
         } catch (EmailException e) {
+            EmailResult emailResult = new EmailResult("fail", LocalDateTime.now());
+           emailDao.insertGeneratedId(emailResult);
             e.printStackTrace();
         }
 
