@@ -15,4 +15,6 @@ public class EmailResult extends BaseEntity {
     private String result;
     @NonNull
     private LocalDateTime dateTime;
+    @NonNull
+    private String email;
 }

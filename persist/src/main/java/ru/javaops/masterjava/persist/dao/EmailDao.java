@@ -21,7 +21,7 @@ public abstract class EmailDao implements AbstractDao {
     @SqlQuery("SELECT * FROM email_result ORDER BY datetime")
     public abstract List<EmailResult> getAll();
 
-    @SqlUpdate("INSERT INTO email_result (name, datetime) VALUES (:name, :dateTime)")
+    @SqlUpdate("INSERT INTO email_result (result, datetime, email) VALUES (:result, :dateTime, :email)")
     @GetGeneratedKeys
     public abstract int insertGeneratedId(@BindBean EmailResult emailResult);
 
@@ -30,6 +30,6 @@ public abstract class EmailDao implements AbstractDao {
         emailResult.setId(id);
     }
 
-    @SqlBatch("INSERT INTO email_result (name, datetime) VALUES (:name, :dateTime)")
+    @SqlBatch("INSERT INTO email_result (result, datetime, email) VALUES (:result, :dateTime, :email)")
     public abstract void insertBatch(@BindBean Collection<EmailResult> emailResults);
 }
